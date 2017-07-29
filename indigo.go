@@ -1,11 +1,27 @@
 package main
 
-import "fmt"
-import "net/http"
+import (
+	"fmt"
+	"net/http"
+	"io/ioutil"
+	"log"
+)
 
 func main() {
-	fmt.Printf("Hello, world.\n")
 	resp, err := http.Get("http://example.com/")
+	defer resp.Body.Close()
 
-	fmt.Printf(resp)
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
+
+	b, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
+
+	fmt.Printf("%s", b)
+
 }
